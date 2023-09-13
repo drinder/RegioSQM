@@ -20,6 +20,8 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
     f = open(smiles_filename)
     for lin in f:
         lin = lin.split()
+        if len(lin) == 1:
+            continue
         name = lin[0]
         smiles = lin[1]
         drugs[name] = {}
@@ -40,12 +42,18 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
     f = open(conf_filename)
 
     # skip header
-    f.next()
+    f.readline()
 
     # read the csv file
     for line in f:
 
         line = line.split(",")
+
+        if len(line)==1:
+            continue
+        line = list(map(lambda e: e.replace('\x00',''), line))
+        line = list(map(lambda e: e.replace('\n',''), line))
+
         name = line[0]
         smiles = line[1]
         reaction_center = int(line[2])
@@ -164,12 +172,12 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
 
 
 def generate_conformations_from_smiles(smiles_filename, mop_header="", max_conf=20):
-
+    
     molecules, charges = prot.protonate_smiles(smiles_filename)
     keys = molecules.keys()
-    keys.sort()
+    list(keys).sort()
 
-    print("name, SMILES, reaction_center, len(conformations)")
+    print("name,SMILES,reaction_center,len(conformations)")
 
     for name in keys:
 
@@ -181,8 +189,7 @@ def generate_conformations_from_smiles(smiles_filename, mop_header="", max_conf=
             # Do conformation search on each smile structure and save it in SDF format
             conformations = molfmt.generate_conformations_files(csmile, cname, charge, max_conf=max_conf, header=mop_header)
 
-            print(", ".join([cname, csmile, str(catom), str(len(conformations))]), ", charge={}".format(str(charge+1)))
-
+            print(",".join([cname, csmile, str(catom), str(len(conformations))])+",charge={}".format(str(charge+1)))
     return
 
 
@@ -225,5 +232,10 @@ def main():
     return 0
 
 if __name__ == "__main__":
+
+    # prod
     main()
+
+    # dev
+    # analyse_results("./example/example.smiles","./example/example.csv")
 

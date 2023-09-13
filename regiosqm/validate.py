@@ -12,7 +12,7 @@ aromatic_ch = m.GetSubstructMatches(Chem.MolFromSmarts('[c;H1]'))
 aromatic_ch = [element for tupl in aromatic_ch for element in tupl]
 
 if len(aromatic_ch) == 0:
-    print "No aromatic carbons"
+    print("No aromatic carbons")
 
-print 1
+print(1)
 

@@ -61,7 +61,7 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
             drugs[drug_name]['confsmil'] = []
 
         # Loop over conformations
-        for x in xrange(n_conformations):
+        for x in range(n_conformations):
 
             # full conformation filename
             fullname = name + "-" + str(x)
@@ -124,34 +124,34 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
         drug_atoms2 = np.unique(atoms[winners2])
         drug_atoms2 = list(drug_atoms2)
 
-        print name,
+        print(name)
 
         if test_exam:
             measure = drugs[drug]['measure']
             if set(measure).issubset(drug_atoms):
-                print "corr",
+                print("corr")
 
             elif set(measure).issubset(drug_atoms2):
-                print "semi",
+                print("semi")
 
             else:
-                print "fail",
+                print("fail")
 
-            print measure, "==",
+            print(measure, "==")
 
         # Print results
-        print ",".join([str(x) for x in drug_atoms]),
-        print ",".join([str(x) for x in drug_atoms2])
+        print(",".join([str(x) for x in drug_atoms]))
+        print(",".join([str(x) for x in drug_atoms2]))
 
         if test_exam:
             confs = drugs[drug]['conf']
             confs = np.array(confs)
             for winner in winners:
-                print "1>", confs[winner], heats[winner]
+                print("1>", confs[winner], heats[winner])
 
             for winner in winners2:
                 if winner in winners: continue
-                print "2>", confs[winner], heats[winner]
+                print("2>", confs[winner], heats[winner])
 
         # Save SVG results
         result_svg = molsvg.generate_structure(smiles, [drug_atoms, drug_atoms2])
@@ -169,7 +169,7 @@ def generate_conformations_from_smiles(smiles_filename, mop_header="", max_conf=
     keys = molecules.keys()
     keys.sort()
 
-    print "name, SMILES, reaction_center, len(conformations)"
+    print("name, SMILES, reaction_center, len(conformations)")
 
     for name in keys:
 
@@ -181,7 +181,7 @@ def generate_conformations_from_smiles(smiles_filename, mop_header="", max_conf=
             # Do conformation search on each smile structure and save it in SDF format
             conformations = molfmt.generate_conformations_files(csmile, cname, charge, max_conf=max_conf, header=mop_header)
 
-            print ", ".join([cname, csmile, str(catom), str(len(conformations))]), ", charge={}".format(str(charge+1))
+            print(", ".join([cname, csmile, str(catom), str(len(conformations))]), ", charge={}".format(str(charge+1)))
 
     return
 

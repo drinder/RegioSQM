@@ -139,6 +139,6 @@ if __name__ == "__main__":
     highlight_predicted = [8, 1, 5]
     highlight_loseicted = [1, 5, 10, 14]
 
-    print generate_structure(smiles, [highlight_predicted, highlight_loseicted], highlight_measure=highlight_measure)
+    print(generate_structure(smiles, [highlight_predicted, highlight_loseicted], highlight_measure=highlight_measure))
 
 

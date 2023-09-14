@@ -5,6 +5,7 @@ from rdkit.Chem import rdMolDescriptors
 
 import re
 import subprocess
+import os
 
 def shell(cmd, shell=False):
 
@@ -15,7 +16,7 @@ def shell(cmd, shell=False):
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     output, err = p.communicate()
-    return output
+    return err
 
 
 
@@ -82,7 +83,7 @@ def convert_mop_sdf(outfile, sdffile):
 
     obabel = "obabel"
 
-    shell(obabel+' -imopout '+outfile+' -osdf > '+'./example/'+sdffile, shell=True)
+    shell(obabel+' -imopout '+'./example/'+outfile+' -osdf > '+'./example/'+sdffile, shell=True)
 
     return
 
@@ -130,7 +131,16 @@ def compare_sdf_structure(start, end):
 
 
 def get_energy(mopac_out):
-    line = shell('grep --text "HEAT OF FORMATION" '+mopac_out, shell=True)
+
+    # line = shell('grep --text "HEAT OF FORMATION" '+mopac_out+' > ./example/tmp', shell=True)
+    
+    line = shell(['Set-Location -Path .\example','findstr /c:"HEAT OF FORMATION" '+mopac_out+' > ./example/tmp'], shell=True)
+
+    # current_dir = os.getcwd()
+    # print(current_dir)
+    # cmds = ['cd '+current_dir+'\example','findstr /c:"HEAT OF FORMATION" '+mopac_out]
+    # line = subprocess.run(cmds, shell=True, capture_output=True, text=True)
+
     heat = re.findall("[-\d]+\.\d+", line)
     if len(heat) != 0:
         heat = heat[0]

@@ -234,8 +234,8 @@ def main():
 if __name__ == "__main__":
 
     # prod
-    main()
+    # main()
 
     # dev
-    # analyse_results("./example/example.smiles","./example/example.csv")
+    analyse_results("./example/example.smiles","./example/example.csv")
 

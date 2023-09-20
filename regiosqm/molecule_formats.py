@@ -137,6 +137,7 @@ def get_energy(mopac_out):
     with open('./'+mopac_out,'r') as f:
         file = f.readlines()
 
+    line = ''
     for s in file:
         if "FINAL HEAT OF FORMATION" in s:
             line = s

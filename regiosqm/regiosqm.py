@@ -182,10 +182,10 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
         pattern_rect = re.compile("<rect")
         pattern_ellipse = re.compile("<ellipse")
         ellipses = []
-
+        
         for i,string in enumerate(result_svg):
             if pattern_ellipse.match(string):
-                del result_svg[i]
+                result_svg[i] = ""
                 ellipses.append(string)
         for i, string in enumerate(result_svg):
             if pattern_rect.match(string): 

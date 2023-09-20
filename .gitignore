@@ -8,7 +8,7 @@ example/*mop
 example/*arc
 example/*sdf
 example/*csv
-
+example/*res
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

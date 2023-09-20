@@ -5,6 +5,12 @@ import protonate as prot
 import molecule_formats as molfmt
 import molecule_svg as molsvg
 
+# import sys
+# sys.path.append('./EXTERNAL_DescriptorCreator')
+# from custom_svg import generate_structure
+
+import re
+
 __version__ = "1.1"
 
 def analyse_results(smiles_filename, conf_filename, test_exam=False):
@@ -163,7 +169,32 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
 
         # Save SVG results
         result_svg = molsvg.generate_structure(smiles, [drug_atoms, drug_atoms2])
+        # result_svg = generate_structure(smiles, [smiles], [name], [[drug_atoms],[drug_atoms2]])
 
+        fd = open(name+'.svg','w')
+        fd.write(result_svg)
+        fd.close()
+
+        # fix problems with SVG file
+        fd = open(name+'.svg','r')
+        result_svg = fd.readlines()
+
+        pattern_rect = re.compile("<rect")
+        pattern_ellipse = re.compile("<ellipse")
+        ellipses = []
+
+        for i,string in enumerate(result_svg):
+            if pattern_ellipse.match(string):
+                del result_svg[i]
+                ellipses.append(string)
+        for i, string in enumerate(result_svg):
+            if pattern_rect.match(string): 
+                idx = i
+                break
+        for string in ellipses:
+            result_svg.insert(idx+1,string)
+        
+        result_svg = "".join(result_svg)
         fd = open(name+'.svg','w')
         fd.write(result_svg)
         fd.close()
@@ -234,8 +265,8 @@ def main():
 if __name__ == "__main__":
 
     # prod
-    # main()
+    main()
 
     # dev
-    analyse_results("./example/example.smiles","./example/example.csv")
+    # analyse_results("./example/example.smiles","./example/example.csv")
 

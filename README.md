@@ -24,14 +24,18 @@ The workflow is as following
     cd example
 	
     # generate conformations from SMILES
-    python ../regiosqm/regiosqm.py -g example.csv > example.csv
+    python ../regiosqm/regiosqm.py -g ./example.smiles > ./example.csv
 	
     # Run all .mop files with mopac
     # or submit them to a cluster
+
     ls *mop | parallel -j4 "mopac {}"
+    
+    "PowerShell"
+    foreach ($file in Get-ChildItem -Filter "*mop") { mopac $file }
 	
     # use the generated csv file to analyse all the 
-    python ../regiosqm/regiosqm.py -a example.csv example.csv > example_results.csv
+    python ../regiosqm/regiosqm.py -a ./example.smiles ./example.csv > ./example_results.csv
 
 
 The results are now parseable from the results file, or viewable by 2D structures with regioselective indicators (in svg format).

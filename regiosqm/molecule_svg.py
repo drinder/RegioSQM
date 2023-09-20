@@ -1,3 +1,4 @@
+import numpy as np
 
 # rdkit
 from rdkit import Chem
@@ -5,7 +6,11 @@ from rdkit.Chem import Draw
 
 def create_svg(rdkitmol, highlights=None):
     """ """
+    if highlights is not None:
+        highlights = [int(x) for x in highlights]
+        
     img = Draw.MolsToGridImage([rdkitmol], molsPerRow=1, subImgSize=(400,400), useSVG=True, highlightAtomLists=[highlights])
+
     svg = img
     # svg = img.data
     svg = svg.replace("xmlns:svg", "xmlns")
@@ -131,13 +136,14 @@ def generate_structure(smiles, predicted, highlight_measure=None):
 if __name__ == "__main__":
 
     smiles = "n1ccc[nH]1"
-    highlight_measure = [1,2]
+    highlight_measure = []
     highlight_predicted = [2]
+    highlight_loseicted = [1]
 
-    smiles = "c1c(nnc(c1)c1ccc(cc1)N)OC1CN2CCC1CC2"
-    highlight_measure = [8, 9]
-    highlight_predicted = [8, 1, 5]
-    highlight_loseicted = [1, 5, 10, 14]
+    # smiles = "c1c(nnc(c1)c1ccc(cc1)N)OC1CN2CCC1CC2"
+    # highlight_measure = [8, 9]
+    # highlight_predicted = [8, 1, 5]
+    # highlight_loseicted = [1, 5, 10, 14]
 
     print(generate_structure(smiles, [highlight_predicted, highlight_loseicted], highlight_measure=highlight_measure))
 

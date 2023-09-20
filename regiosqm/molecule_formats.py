@@ -7,6 +7,8 @@ import re
 import subprocess
 import os
 
+import numpy as np
+
 def shell(cmd, shell=False):
 
     if shell:
@@ -83,7 +85,7 @@ def convert_mop_sdf(outfile, sdffile):
 
     obabel = "obabel"
 
-    shell(obabel+' -imopout '+'./example/'+outfile+' -osdf > '+'./example/'+sdffile, shell=True)
+    shell(obabel+' -imopout '+'./'+outfile+' -osdf > '+'./'+sdffile, shell=True)
 
     return
 
@@ -94,7 +96,7 @@ def get_bonds(sdf_file):
     atoms = 0
     bond_list = []
 
-    searchlines = open('./example/'+sdf_file, 'r').readlines()
+    searchlines = open('./'+sdf_file, 'r').readlines()
 
     for i, line in enumerate(searchlines):
         words = line.split() # split line into words
@@ -132,14 +134,13 @@ def compare_sdf_structure(start, end):
 
 def get_energy(mopac_out):
 
-    # line = shell('grep --text "HEAT OF FORMATION" '+mopac_out+' > ./example/tmp', shell=True)
-    
-    line = shell(['Set-Location -Path .\example','findstr /c:"HEAT OF FORMATION" '+mopac_out+' > ./example/tmp'], shell=True)
+    with open('./'+mopac_out,'r') as f:
+        file = f.readlines()
 
-    # current_dir = os.getcwd()
-    # print(current_dir)
-    # cmds = ['cd '+current_dir+'\example','findstr /c:"HEAT OF FORMATION" '+mopac_out]
-    # line = subprocess.run(cmds, shell=True, capture_output=True, text=True)
+    for s in file:
+        if "FINAL HEAT OF FORMATION" in s:
+            line = s
+            break
 
     heat = re.findall("[-\d]+\.\d+", line)
     if len(heat) != 0:
@@ -149,4 +150,7 @@ def get_energy(mopac_out):
         heat = 60000.0
 
     return heat
+    
 
+if __name__ == "__main__":
+    print(get_energy("comp1+_1-0.out"))

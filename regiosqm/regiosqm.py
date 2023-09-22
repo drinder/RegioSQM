@@ -45,7 +45,7 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
     f.close()
 
     # Read regiosqm conformation csv file
-    f = open(conf_filename)
+    f = open(conf_filename, encoding="utf-16")
 
     # skip header
     f.readline()

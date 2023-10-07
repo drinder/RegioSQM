@@ -80,7 +80,7 @@ def protonate_smiles(filename):
         dictionary of neutral charge
     """
 
-    file = open(filename, "r")
+    file = open(filename, "r", encoding="utf-16")
 
     molecules = {}
     charges = {}

@@ -23,7 +23,7 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
     drugs_keys = []
 
     # Read smiles database
-    f = open(smiles_filename)
+    f = open(smiles_filename,encoding="UTF-16")
     for lin in f:
         lin = lin.split()
         if len(lin) == 1:

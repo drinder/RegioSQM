@@ -86,6 +86,8 @@ def convert_mop_sdf(outfile, sdffile):
     obabel = "obabel"
 
     shell(obabel+' -imopout '+'./'+outfile+' -osdf > '+'./'+sdffile, shell=True)
+    # dev
+    # shell(obabel+' -imopout '+'./example/'+outfile+' -osdf > '+'./example/'+sdffile, shell=True)
 
     return
 
@@ -97,6 +99,8 @@ def get_bonds(sdf_file):
     bond_list = []
 
     searchlines = open('./'+sdf_file, 'r').readlines()
+    # dev
+    # searchlines = open('./example/'+sdf_file, 'r').readlines()
 
     for i, line in enumerate(searchlines):
         words = line.split() # split line into words

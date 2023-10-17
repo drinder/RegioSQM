@@ -120,52 +120,59 @@ def analyse_results(smiles_filename, conf_filename, test_exam=False):
         atoms = drugs[drug]['atom']
         atoms = np.array(drugs[drug]['atom'])
 
-        minimum = np.min(heats)
+        if len(drugs[drug]['heat']) > 0:
 
-        buffer_heats = heats - minimum
+            minimum = np.min(heats)
 
-        winners = np.where( buffer_heats < e_cut )
-        winners = winners[0]
+            buffer_heats = heats - minimum
 
-        winners2 = np.where( buffer_heats < e_cut2 )
-        winners2 = winners2[0]
+            winners = np.where( buffer_heats < e_cut )
+            winners = winners[0]
 
-        # Read reactive center
-        drug_atoms = np.unique(atoms[winners])
-        drug_atoms = list(drug_atoms)
+            winners2 = np.where( buffer_heats < e_cut2 )
+            winners2 = winners2[0]
 
-        # Secondary winners
-        drug_atoms2 = np.unique(atoms[winners2])
-        drug_atoms2 = list(drug_atoms2)
+            # Read reactive center
+            drug_atoms = np.unique(atoms[winners])
+            drug_atoms = list(drug_atoms)
 
-        print(name)
+            # Secondary winners
+            drug_atoms2 = np.unique(atoms[winners2])
+            drug_atoms2 = list(drug_atoms2)
 
-        if test_exam:
-            measure = drugs[drug]['measure']
-            if set(measure).issubset(drug_atoms):
-                print("corr")
+            print(name)
 
-            elif set(measure).issubset(drug_atoms2):
-                print("semi")
+            if test_exam:
+                measure = drugs[drug]['measure']
+                if set(measure).issubset(drug_atoms):
+                    print("corr")
 
-            else:
-                print("fail")
+                elif set(measure).issubset(drug_atoms2):
+                    print("semi")
 
-            print(measure, "==")
+                else:
+                    print("fail")
 
-        # Print results
-        print(",".join([str(x) for x in drug_atoms]))
-        print(",".join([str(x) for x in drug_atoms2]))
+                print(measure, "==")
 
-        if test_exam:
-            confs = drugs[drug]['conf']
-            confs = np.array(confs)
-            for winner in winners:
-                print("1>", confs[winner], heats[winner])
+            # Print results
+            print(",".join([str(x) for x in drug_atoms]))
+            print(",".join([str(x) for x in drug_atoms2]))
 
-            for winner in winners2:
-                if winner in winners: continue
-                print("2>", confs[winner], heats[winner])
+            if test_exam:
+                confs = drugs[drug]['conf']
+                confs = np.array(confs)
+                for winner in winners:
+                    print("1>", confs[winner], heats[winner])
+
+                for winner in winners2:
+                    if winner in winners: continue
+                    print("2>", confs[winner], heats[winner])
+        else:
+            print(name)
+            print("WARNING: No matching structures. Prediction failed.")
+            drug_atoms = []
+            drug_atoms2 = []
 
         # Save SVG results
         result_svg = molsvg.generate_structure(smiles, [drug_atoms, drug_atoms2])
@@ -264,9 +271,8 @@ def main():
 
 if __name__ == "__main__":
 
-    # prod
-    main()
 
+    main()
     # dev
     # analyse_results("./example/example.smiles","./example/example.csv")
 
